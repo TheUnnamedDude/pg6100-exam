@@ -13,7 +13,7 @@
     <dependencies>
         <dependency>
             <groupId>no.westerdals.quiz</groupId>
-            <artifactId>backend</artifactId>
+            <artifactId>quiz-api</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
