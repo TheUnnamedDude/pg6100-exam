@@ -15,7 +15,7 @@ public class Answer {
     @Size(min = 1)
     private String text;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Question question;
 
     public Long getId() {
