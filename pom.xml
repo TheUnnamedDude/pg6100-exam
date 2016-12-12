@@ -10,6 +10,7 @@
     <modules>
         <module>quiz-impl</module>
         <module>coverage</module>
+        <module>quiz-api</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -25,6 +26,7 @@
     </properties>
 
     <dependencyManagement>
+        <!-- Java EE -->
         <dependencies>
             <dependency>
                 <groupId>javax</groupId>
@@ -41,6 +43,18 @@
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-validator</artifactId>
                 <version>5.2.4.Final</version>
+            </dependency>
+
+            <!-- Documentation -->
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-jaxrs</artifactId>
+                <version>1.5.10</version>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-hibernate-validations</artifactId>
+                <version>1.5.10</version>
             </dependency>
 
             <!-- Database driver -->
