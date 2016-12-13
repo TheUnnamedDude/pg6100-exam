@@ -35,6 +35,7 @@ public class CategoryEJB {
         subCategory.setName(name);
         subCategory.setParent(category);
         category.getSubcategories().add(subCategory);
+        em.persist(subCategory);
         return subCategory;
     }
 
@@ -50,7 +51,7 @@ public class CategoryEJB {
         return em.createNamedQuery(Category.GET_ALL, Category.class).getResultList();
     }
 
-    public Collection<Category> getCategoriesResolved() {
+    public Collection<Category> getCategoriesWithSubcategories() {
         List<Category> categories = getCategories();
         categories.stream()
                 .map(Category::getSubcategories)
@@ -69,5 +70,11 @@ public class CategoryEJB {
 
     public List<SubCategory> getSubcategoryByParent(Long parentId) {
         return getCategory(parentId).getSubcategories();
+    }
+
+    public Category getCategoryWithSubcategories(Long categoryId) {
+        Category category = getCategory(categoryId);
+        category.getSubcategories().forEach(SubCategory::getName);
+        return category;
     }
 }

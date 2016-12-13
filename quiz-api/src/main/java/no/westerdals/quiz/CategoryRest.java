@@ -31,7 +31,10 @@ public interface CategoryRest {
     @ApiOperation("Get a category by id")
     @GET
     @Path("/{id}")
-    CategoryDto getCategory(@ApiParam("the id to query for") @PathParam("id") Long id);
+    CategoryDto getCategory(
+            @ApiParam("the id to query for") @PathParam("id") Long id,
+            @ApiParam("Add subcategories to this result?") @QueryParam("expand") @DefaultValue("false") boolean expand
+    );
 
     @ApiOperation("Delete a category by id")
     @DELETE
@@ -57,7 +60,7 @@ public interface CategoryRest {
     @Path("/{parentId}/subcategories")
     Response createSubcategory(
             @ApiParam("Parent category id") @PathParam("parentId") Long parentId,
-            @ApiParam("The content of the new category") CategoryDto categoryDto
+            @ApiParam("The content of the new category") SubCategoryDto categoryDto
     );
 
     @ApiOperation("Get all subcategories")
@@ -69,6 +72,6 @@ public interface CategoryRest {
 
     @ApiOperation("Get a subcategory by id")
     @GET
-    @Path("/subcategory/{parentId}")
-    SubCategoryDto getSubcategory(@ApiParam("The id of this subcategory") @PathParam("parentId") Long parentId);
+    @Path("/subcategory/{id}")
+    SubCategoryDto getSubcategory(@ApiParam("The id of this subcategory") @PathParam("id") Long id);
 }

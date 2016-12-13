@@ -32,12 +32,12 @@ public class CategoryRestImpl implements CategoryRest {
     @EJB
     private CategoryEJB categoryEJB;
 
-    private CategoryDtoConverter categoryConverter = new CategoryDtoConverter();
+    private CategoryDtoConverter categoryConverterExpanding = new CategoryDtoConverter(true);
+    private CategoryDtoConverter categoryConverter = new CategoryDtoConverter(false);
     private SubcategoryDtoConverter subcategoryConverter = new SubcategoryDtoConverter();
 
     @Override
     public Response createCategory(CategoryDto categoryDto) {
-        System.out.println("=====" + categoryEJB);
         Category category = categoryEJB.createCategory(categoryDto.text);
         return Response.created(uriInfo.getBaseUriBuilder().path(ENDPOINT).path(category.getId().toString()).build())
                 .build();
@@ -46,15 +46,19 @@ public class CategoryRestImpl implements CategoryRest {
     @Override
     public List<CategoryDto> getCategories(boolean expand) {
         if (expand) {
-            return categoryConverter.convert(categoryEJB.getCategoriesResolved());
+            return categoryConverterExpanding.convert(categoryEJB.getCategoriesWithSubcategories());
         } else {
             return categoryConverter.convert(categoryEJB.getCategories());
         }
     }
 
     @Override
-    public CategoryDto getCategory(Long id) {
-        return categoryConverter.convert(categoryEJB.getCategory(id));
+    public CategoryDto getCategory(Long id, boolean expand) {
+        if (expand) {
+            return categoryConverterExpanding.convert(categoryEJB.getCategoryWithSubcategories(id));
+        } else {
+            return categoryConverter.convert(categoryEJB.getCategory(id));
+        }
     }
 
     @Override
@@ -94,9 +98,15 @@ public class CategoryRestImpl implements CategoryRest {
     }
 
     @Override
-    public Response createSubcategory(Long parentId, CategoryDto categoryDto) {
-        SubCategory subCategory = categoryEJB.createSubCategory(parentId, categoryDto.text);
-        return Response.seeOther(UriBuilder.fromPath(ENDPOINT.substring(1) + "/{id}").build(subCategory.getId())).build();
+    public Response createSubcategory(Long parentId, SubCategoryDto subCategoryDto) {
+        SubCategory subCategory = categoryEJB.createSubCategory(parentId, subCategoryDto.text);
+        return Response.created(
+                uriInfo.getBaseUriBuilder()
+                        .path(ENDPOINT)
+                        .path("subcategory")
+                        .path(subCategory.getId().toString())
+                        .build())
+                .build();
     }
 
     @Override

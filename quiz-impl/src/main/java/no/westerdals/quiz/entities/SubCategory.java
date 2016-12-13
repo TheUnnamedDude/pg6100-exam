@@ -1,8 +1,8 @@
 package no.westerdals.quiz.entities;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @NamedQueries({
         @NamedQuery(
@@ -19,7 +19,7 @@ public class SubCategory {
     private Long id;
 
     @NotNull
-    @Min(4)
+    @Size(min = 4)
     private String name;
 
     @NotNull
