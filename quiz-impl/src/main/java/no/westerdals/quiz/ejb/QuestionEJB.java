@@ -1,6 +1,5 @@
 package no.westerdals.quiz.ejb;
 
-import no.westerdals.quiz.dto.AnswerDto;
 import no.westerdals.quiz.entities.Answer;
 import no.westerdals.quiz.entities.Question;
 

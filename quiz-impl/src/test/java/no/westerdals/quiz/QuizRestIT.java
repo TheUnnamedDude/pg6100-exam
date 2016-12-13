@@ -5,7 +5,6 @@ import com.google.gson.reflect.TypeToken;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import no.westerdals.quiz.dto.*;
-import no.westerdals.quiz.entities.Subcategory;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -15,7 +14,6 @@ import java.util.stream.Collectors;
 
 
 import static io.restassured.RestAssured.*;
-import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 public class QuizRestIT extends RestITBase {

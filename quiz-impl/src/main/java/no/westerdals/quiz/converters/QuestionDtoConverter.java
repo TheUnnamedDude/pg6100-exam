@@ -19,6 +19,7 @@ public class QuestionDtoConverter implements DtoConverter<Question, QuestionDto>
         entity.getIncorrectAnswers().stream().map(this::convertAnswer).forEach(answers::add);
         answers.add(convertAnswer(entity.getCorrectAnswer()));
         Collections.shuffle(answers);
+        questionDto.id = entity.getId();
         questionDto.alternatives = answers;
         questionDto.category = subcategoryConverter.convert(entity.getSubcategory());
         return questionDto;

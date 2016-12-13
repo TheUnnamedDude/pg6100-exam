@@ -11,6 +11,8 @@
         <module>quiz-impl</module>
         <module>coverage</module>
         <module>quiz-api</module>
+        <module>game-rest</module>
+        <module>game-commands</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -23,6 +25,7 @@
         <jboss.target>${basedir}${fs}target${fs}downloaded_Wildfly</jboss.target>
         <jboss.home>${jboss.target}${fs}wildfly-${wildfly.version}</jboss.home>
         <jacoco.version>0.7.7.201606060606</jacoco.version>
+        <dropwizard.version>1.0.5</dropwizard.version>
     </properties>
 
     <dependencyManagement>
@@ -64,6 +67,19 @@
                 <artifactId>h2</artifactId>
                 <version>1.4.192</version>
                 <scope>provided</scope>
+            </dependency>
+
+            <!-- Dropwizard -->
+            <dependency>
+                <groupId>io.dropwizard</groupId>
+                <artifactId>dropwizard-core</artifactId>
+                <version>${dropwizard.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.netflix.hystrix</groupId>
+                <artifactId>hystrix-core</artifactId>
+                <version>1.5.8</version>
+                <scope>compile</scope>
             </dependency>
 
             <!-- For testing -->
