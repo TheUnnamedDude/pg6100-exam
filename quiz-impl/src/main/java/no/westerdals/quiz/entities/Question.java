@@ -13,12 +13,17 @@ import java.util.List;
         @NamedQuery(
                 name = Question.GET_SIZE,
                 query = "select count(*) from Question"
+        ),
+        @NamedQuery(
+                name = Question.GET_ALL_BY_SUBCATEGORY,
+                query = "select q from Question as q where q.subcategory.id = :subcategoryId"
         )
 })
 @Entity
 public class Question {
     public static final String GET_ALL = "Question#getAll";
     public static final String GET_SIZE = "Question#getSize";
+    public static final String GET_ALL_BY_SUBCATEGORY = "Question#getAllBySubcategory";
 
     @GeneratedValue
     @Id

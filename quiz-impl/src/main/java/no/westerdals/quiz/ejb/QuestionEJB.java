@@ -86,4 +86,10 @@ public class QuestionEJB {
                 .setMaxResults(results)
                 .getResultList();
     }
+
+    public List<Question> getQuestionsByCategory(Long subcategoryId) {
+        return em.createNamedQuery(Question.GET_ALL_BY_SUBCATEGORY, Question.class)
+                .setParameter("subcategoryId", subcategoryId)
+                .getResultList();
+    }
 }

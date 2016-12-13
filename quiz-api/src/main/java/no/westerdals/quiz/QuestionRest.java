@@ -18,7 +18,8 @@ public interface QuestionRest {
     @ApiOperation("Get all questions")
     DtoList<QuestionDto> getQuestions(
             @ApiParam("Starting offset for the dataset returned") @QueryParam("offset") @DefaultValue("0") int offset,
-            @ApiParam("Number of results returned") @QueryParam("results") @DefaultValue("20") int results
+            @ApiParam("Number of results returned") @QueryParam("results") @DefaultValue("20") int results,
+            @ApiParam("The ID of the subcategory the result should be in") @QueryParam("filter") Long filter
     );
 
     @POST

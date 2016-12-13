@@ -5,13 +5,12 @@ import com.google.gson.reflect.TypeToken;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import no.westerdals.quiz.dto.*;
-import no.westerdals.quiz.entities.Question;
+import no.westerdals.quiz.entities.Subcategory;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -267,6 +266,69 @@ public class QuizRestIT extends RestITBase {
                 original.list.stream().allMatch(q1 -> previous.list.stream().anyMatch(q2 -> q1.text.equals(q2.text))));
     }
 
+    @Test
+    public void testFilter() throws Exception {
+        SubcategoryDto subcategory = createSubcategory("Filters", "Subcategory filters");
+        QuestionDto questionDto = new QuestionDto();
+        questionDto.text = "Do they work?";
+        questionDto.category = subcategory;
+        AnswerDto answer = new AnswerDto();
+        answer.text = "Yes";
+        questionDto.answer = answer;
+        questionDto.alternatives = Arrays.stream(new String[] {"No", "Maybe", "Who knows"}).map(s -> {
+            AnswerDto a = new AnswerDto();
+            a.text = s;
+            return a;
+        }).collect(Collectors.toList());
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(questionDto)
+                .post("quizzes")
+                .then()
+                .statusCode(201);
+
+        DtoList<QuestionDto> next = gson.fromJson(given()
+                .accept(ContentType.JSON)
+                .queryParam("results", 200) // TODO: Change this if we change specs
+                .get("quizzes")
+                .then()
+                .statusCode(200)
+                .extract()
+                .asString(), new TypeToken<DtoList<QuestionDto>>(){}.getType());
+
+        assertTrue("Result didn't contain question created", next.list.stream().anyMatch(q -> q.text.equals(questionDto.text)));
+
+
+
+        DtoList<QuestionDto> filtered = gson.fromJson(given()
+                .accept(ContentType.JSON)
+                .queryParam("filter", subcategory.id)
+                .get("quizzes")
+                .then()
+                .statusCode(200)
+                .extract()
+                .asString(), new TypeToken<DtoList<QuestionDto>>(){}.getType());
+
+        assertEquals(questionDto.text, filtered.list.get(0).text);
+
+
+        DtoList<QuestionDto> filteredInvalid = gson.fromJson(given()
+                .accept(ContentType.JSON)
+                .queryParam("filter", subcategory.id + 1)
+                .get("quizzes")
+                .then()
+                .statusCode(200)
+                .extract()
+                .asString(), new TypeToken<DtoList<QuestionDto>>(){}.getType());
+
+        String invalidText = null;
+        if (!filteredInvalid.list.isEmpty()) {
+            invalidText = filteredInvalid.list.get(0).text;
+        }
+        assertNotEquals(questionDto.text, invalidText);
+    }
+
     private ArrayList<QuestionDto> createQuestions(String category, String subcategoryText, int questionCount) {
         SubcategoryDto subcategory = createSubcategory(category, subcategoryText);
         ArrayList<QuestionDto> questions = new ArrayList<>();
@@ -295,7 +357,6 @@ public class QuizRestIT extends RestITBase {
 
             questions.add(given()
                     .accept(ContentType.JSON)
-
                     .get(location)
                     .then()
                     .statusCode(200)

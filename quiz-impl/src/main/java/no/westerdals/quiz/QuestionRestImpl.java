@@ -15,6 +15,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
@@ -28,9 +29,17 @@ public class QuestionRestImpl implements QuestionRest {
     private QuestionDtoConverter questionConverter = new QuestionDtoConverter();
 
     @Override
-    public DtoList<QuestionDto> getQuestions(int offset, int results) {
-        Long size = questionEJB.getNumberOfQuestions();
-        List<Question> questions = questionEJB.getQuestions(offset, results);
+    public DtoList<QuestionDto> getQuestions(int offset, int results, Long filter) {
+        Long size;
+        List<Question> questions;
+        if (filter == null) {
+            size = questionEJB.getNumberOfQuestions();
+            questions = questionEJB.getQuestions(offset, results);
+        } else {
+            List<Question> result = questionEJB.getQuestionsByCategory(filter);
+            size = (long) result.size();
+            questions = result.stream().skip(offset).limit(results).collect(Collectors.toList());
+        }
         String self = uriInfo.getAbsolutePathBuilder()
                 .queryParam("offset", offset)
                 .queryParam("results", results)
