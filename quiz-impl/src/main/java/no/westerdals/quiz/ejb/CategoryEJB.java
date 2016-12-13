@@ -6,6 +6,7 @@ import no.westerdals.quiz.entities.SubCategory;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.Collection;
 import java.util.List;
 
 @Stateless
@@ -49,7 +50,24 @@ public class CategoryEJB {
         return em.createNamedQuery(Category.GET_ALL, Category.class).getResultList();
     }
 
+    public Collection<Category> getCategoriesResolved() {
+        List<Category> categories = getCategories();
+        categories.stream()
+                .map(Category::getSubcategories)
+                .flatMap(List::stream)
+                .forEach(SubCategory::getName); // Make sure every subcategory is resolved
+        return categories;
+    }
+
     public List<SubCategory> getSubCategories() {
         return em.createNamedQuery(SubCategory.GET_ALL, SubCategory.class).getResultList();
+    }
+
+    public void deleteCategory(Long categoryId) {
+        em.remove(getCategory(categoryId));
+    }
+
+    public List<SubCategory> getSubcategoryByParent(Long parentId) {
+        return getCategory(parentId).getSubcategories();
     }
 }

@@ -3,6 +3,7 @@ package no.westerdals.quiz.entities;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @NamedQueries({
@@ -18,7 +19,7 @@ public class Category {
     @Id
     private Long id;
     @NotNull
-    @Min(4)
+    @Size(min = 4)
     private String text;
     @OneToMany(mappedBy = "parent")
     private List<SubCategory> subcategories;

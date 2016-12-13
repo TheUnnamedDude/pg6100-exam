@@ -12,7 +12,7 @@ public class QuestionEJBTest extends EJBTestBase {
 
     @Test
     public void testCreateQuestion() throws Exception {
-        Question question = questionEJB.createAnswer("Is this working?", "Yes", "no", "maybe", "who knows?");
+        Question question = questionEJB.createQuestion("Is this working?", "Yes", "no", "maybe", "who knows?");
         assertNotNull(question.getId());
     }
 }

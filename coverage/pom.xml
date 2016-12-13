@@ -15,10 +15,11 @@
             <groupId>no.westerdals.quiz</groupId>
             <artifactId>quiz-impl</artifactId>
             <version>${project.version}</version>
+            <type>war</type>
         </dependency>
         <dependency>
-            <groupId>no.westerdals.news</groupId>
-            <artifactId>frontend</artifactId>
+            <groupId>no.westerdals.quiz</groupId>
+            <artifactId>quiz-api</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

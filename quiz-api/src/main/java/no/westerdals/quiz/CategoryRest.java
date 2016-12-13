@@ -8,6 +8,8 @@ import no.westerdals.quiz.dto.CategoryDto;
 import no.westerdals.quiz.dto.SubCategoryDto;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path(CategoryRest.ENDPOINT)
@@ -16,8 +18,9 @@ public interface CategoryRest {
     String ENDPOINT = "/categories";
 
     @ApiOperation("Create a new category")
+    @Consumes(MediaType.APPLICATION_JSON)
     @POST
-    void createCategory(CategoryDto categoryDto);
+    Response createCategory(@ApiParam("The contents of the category to be created") CategoryDto categoryDto);
 
     @ApiOperation("Get all categories")
     @GET
@@ -39,28 +42,33 @@ public interface CategoryRest {
     @PATCH
     @Path("/{id}")
     @Consumes("application/merge-patch+json")
-    CategoryDto patchCategory(
+    Response patchCategory(
             @ApiParam("The id of the category to patch") @PathParam("id") Long id,
             @ApiParam("The entity that should be used for the merge patch") String json
     );
 
     @ApiOperation("Get all subcategories for the specified category")
     @GET
-    @Path("/{id}/subcategories")
-    List<SubCategoryDto> getSubcategoriesByCategory(@ApiParam("The id of the category") @PathParam("id") Long categoryId);
+    @Path("/{parentId}/subcategories")
+    Response getSubcategoriesByCategory(@ApiParam("The id of the parent category") @PathParam("parentId") Long parentId);
 
     @ApiOperation("Create a new subcategory")
     @POST
-    @Path("/{id}/subcategories")
-    SubCategoryDto createSubcategory(@ApiParam("The content of the new category") CategoryDto categoryDto);
+    @Path("/{parentId}/subcategories")
+    Response createSubcategory(
+            @ApiParam("Parent category id") @PathParam("parentId") Long parentId,
+            @ApiParam("The content of the new category") CategoryDto categoryDto
+    );
 
     @ApiOperation("Get all subcategories")
     @GET
     @Path("/subcategories")
-    List<SubCategoryDto> getSubcategories();
+    List<SubCategoryDto> getSubcategories(
+            @ApiParam("a parent category to look for subcategories in") @QueryParam("parentId") Long parentId
+    );
 
     @ApiOperation("Get a subcategory by id")
     @GET
-    @Path("/subcategory/{id}")
-    SubCategoryDto getSubcategory(@ApiParam("The id of this subcategory") @PathParam("id") Long id);
+    @Path("/subcategory/{parentId}")
+    SubCategoryDto getSubcategory(@ApiParam("The id of this subcategory") @PathParam("parentId") Long parentId);
 }

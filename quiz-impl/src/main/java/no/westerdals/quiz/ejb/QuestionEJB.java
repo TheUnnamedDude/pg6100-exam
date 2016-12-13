@@ -1,5 +1,6 @@
 package no.westerdals.quiz.ejb;
 
+import no.westerdals.quiz.dto.AnswerDto;
 import no.westerdals.quiz.entities.Answer;
 import no.westerdals.quiz.entities.Question;
 
@@ -20,7 +21,7 @@ public class QuestionEJB {
 
     private final Random random = new Random();
 
-    public Question createAnswer(String text, String answer, String... incorrectAnswers) {
+    public Question createQuestion(String text, String answer, String... incorrectAnswers) {
         Question question = new Question();
         List<Answer> answers = Arrays.stream(incorrectAnswers)
                 .map(s -> createAnswer(s, question))
