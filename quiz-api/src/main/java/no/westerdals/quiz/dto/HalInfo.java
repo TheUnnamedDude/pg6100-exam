@@ -1,14 +1,22 @@
 package no.westerdals.quiz.dto;
 
 public class HalInfo {
-    public final Href self;
+    public Href self;
+
+    public HalInfo() {
+
+    }
 
     public HalInfo(String self) {
         this.self = new Href(self);
     }
 
     public static class Href {
-        public final String href;
+        public String href;
+
+        public Href() {
+
+        }
 
         public Href(String href) {
             this.href = href;

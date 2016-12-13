@@ -14,6 +14,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
+import java.util.List;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
@@ -28,8 +29,24 @@ public class QuestionRestImpl implements QuestionRest {
 
     @Override
     public DtoList<QuestionDto> getQuestions(int offset, int results) {
-        // TODO: Fix pagination
-        return null;
+        Long size = questionEJB.getNumberOfQuestions();
+        List<Question> questions = questionEJB.getQuestions(offset, results);
+        String self = uriInfo.getAbsolutePathBuilder()
+                .queryParam("offset", offset)
+                .queryParam("results", results)
+                .build()
+                .toString();
+        String next = uriInfo.getAbsolutePathBuilder()
+                .queryParam("offset", offset + results)
+                .queryParam("results", results)
+                .build()
+                .toString();
+        String previous = uriInfo.getAbsolutePathBuilder()
+                .queryParam("offset", offset - results)
+                .queryParam("results", results)
+                .build()
+                .toString();
+        return questionConverter.convertHAL(questions, (long) offset, size, self, next, previous);
     }
 
     @Override

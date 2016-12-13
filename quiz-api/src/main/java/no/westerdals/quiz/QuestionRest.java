@@ -26,12 +26,12 @@ public interface QuestionRest {
     Response createQuestion(@ApiParam("The question to create") QuestionDto question);
 
     @GET
-    @ApiOperation("Get a question by id")
-    @Path("/{id}")
-    QuestionDto getQuestion(@ApiParam("The id to look for") @PathParam("id") Long id);
-
-    @GET
     @ApiOperation("Get a random question")
     @Path("/random")
     QuestionDto getRandomQuestion();
+
+    @GET
+    @ApiOperation("Get a question by id")
+    @Path("/{id}")
+    QuestionDto getQuestion(@ApiParam("The id to look for") @PathParam("id") Long id);
 }

@@ -79,4 +79,11 @@ public class QuestionEJB {
         answer.setQuestion(question);
         return answer;
     }
+
+    public List<Question> getQuestions(int offset, int results) {
+        return em.createNamedQuery(Question.GET_ALL, Question.class)
+                .setFirstResult(offset)
+                .setMaxResults(results)
+                .getResultList();
+    }
 }
