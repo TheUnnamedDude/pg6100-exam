@@ -7,4 +7,5 @@ public class QuestionDto {
     // This is for POST's, should not be populated by the converter
     public AnswerDto answer;
     public List<AnswerDto> alternatives;
+    public SubcategoryDto category;
 }

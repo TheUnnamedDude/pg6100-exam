@@ -29,7 +29,7 @@ public class CategoryEJB {
         return category;
     }
 
-    public Subcategory createSubCategory(Long parentCategory, String name) {
+    public Subcategory createSubcategory(Long parentCategory, String name) {
         Category category = getCategory(parentCategory);
         Subcategory subcategory = new Subcategory();
         subcategory.setName(name);

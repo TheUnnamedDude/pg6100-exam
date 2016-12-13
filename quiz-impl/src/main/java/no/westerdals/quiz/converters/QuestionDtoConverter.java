@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class QuestionDtoConverter implements DtoConverter<Question, QuestionDto> {
+    private final static SubcategoryDtoConverter subcategoryConverter = new SubcategoryDtoConverter();
+
     @Override
     public QuestionDto convert(Question entity) {
         QuestionDto questionDto = new QuestionDto();
@@ -18,6 +20,7 @@ public class QuestionDtoConverter implements DtoConverter<Question, QuestionDto>
         answers.add(convertAnswer(entity.getCorrectAnswer()));
         Collections.shuffle(answers);
         questionDto.alternatives = answers;
+        questionDto.category = subcategoryConverter.convert(entity.getSubcategory());
         return questionDto;
     }
 

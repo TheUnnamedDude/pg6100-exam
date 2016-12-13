@@ -3,7 +3,7 @@ package no.westerdals.quiz;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import no.westerdals.quiz.dto.CategoryDto;
-import no.westerdals.quiz.dto.SubCategoryDto;
+import no.westerdals.quiz.dto.SubcategoryDto;
 import no.westerdals.quiz.converters.CategoryDtoConverter;
 import no.westerdals.quiz.converters.SubcategoryDtoConverter;
 import no.westerdals.quiz.ejb.CategoryEJB;
@@ -99,8 +99,8 @@ public class CategoryRestImpl implements CategoryRest {
     }
 
     @Override
-    public Response createSubcategory(Long parentId, SubCategoryDto subCategoryDto) {
-        Subcategory subcategory = categoryEJB.createSubCategory(parentId, subCategoryDto.text);
+    public Response createSubcategory(Long parentId, SubcategoryDto subcategoryDto) {
+        Subcategory subcategory = categoryEJB.createSubcategory(parentId, subcategoryDto.text);
         return Response.created(
                 uriInfo.getBaseUriBuilder()
                         .path(ENDPOINT)
@@ -111,7 +111,7 @@ public class CategoryRestImpl implements CategoryRest {
     }
 
     @Override
-    public List<SubCategoryDto> getSubcategories(Long parentId) {
+    public List<SubcategoryDto> getSubcategories(Long parentId) {
         if (parentId == null) {
             return subcategoryConverter.convert(categoryEJB.getSubCategories());
         } else {
@@ -120,7 +120,7 @@ public class CategoryRestImpl implements CategoryRest {
     }
 
     @Override
-    public SubCategoryDto getSubcategory(Long id) {
+    public SubcategoryDto getSubcategory(Long id) {
         return subcategoryConverter.convert(categoryEJB.getSubCategory(id));
     }
 }

@@ -5,5 +5,5 @@ import java.util.List;
 public class CategoryDto {
     public Long id;
     public String text;
-    public List<SubCategoryDto> subcategories;
+    public List<SubcategoryDto> subcategories;
 }

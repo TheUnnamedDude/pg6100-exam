@@ -35,8 +35,9 @@ public class QuestionRestImpl implements QuestionRest {
     @Override
     public Response createQuestion(QuestionDto questionDto) {
         String[] alternatives = questionDto.alternatives.stream().map(answer -> answer.text).toArray(String[]::new);
-        Question question = questionEJB.createQuestion(questionDto.text, questionDto.answer.text, alternatives);
-        return Response.seeOther(uriInfo.getAbsolutePathBuilder().path(ENDPOINT).path(question.getId().toString()).build()).build();
+        Question question = questionEJB.createQuestion(questionDto.category.id, questionDto.text,
+                questionDto.answer.text, alternatives);
+        return Response.created(uriInfo.getBaseUriBuilder().path(ENDPOINT).path(question.getId().toString()).build()).build();
     }
 
     @Override

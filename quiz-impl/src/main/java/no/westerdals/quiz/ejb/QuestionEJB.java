@@ -18,10 +18,12 @@ import java.util.stream.Collectors;
 public class QuestionEJB {
     @PersistenceContext
     private EntityManager em;
+    @EJB
+    private CategoryEJB categoryEJB;
 
     private final Random random = new Random();
 
-    public Question createQuestion(String text, String answer, String... incorrectAnswers) {
+    public Question createQuestion(Long subcategoryId, String text, String answer, String... incorrectAnswers) {
         Question question = new Question();
         List<Answer> answers = Arrays.stream(incorrectAnswers)
                 .map(s -> createAnswer(s, question))
@@ -29,6 +31,7 @@ public class QuestionEJB {
         question.setText(text);
         question.setCorrectAnswer(createAnswer(answer, question));
         question.setIncorrectAnswers(answers);
+        question.setSubcategory(categoryEJB.getSubCategory(subcategoryId));
         em.persist(question);
         return question;
     }

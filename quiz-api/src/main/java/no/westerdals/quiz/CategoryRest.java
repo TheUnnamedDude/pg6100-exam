@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.jaxrs.PATCH;
 import no.westerdals.quiz.dto.CategoryDto;
-import no.westerdals.quiz.dto.SubCategoryDto;
+import no.westerdals.quiz.dto.SubcategoryDto;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -60,18 +60,18 @@ public interface CategoryRest {
     @Path("/{parentId}/subcategories")
     Response createSubcategory(
             @ApiParam("Parent category id") @PathParam("parentId") Long parentId,
-            @ApiParam("The content of the new category") SubCategoryDto categoryDto
+            @ApiParam("The content of the new category") SubcategoryDto categoryDto
     );
 
     @ApiOperation("Get all subcategories")
     @GET
     @Path("/subcategories")
-    List<SubCategoryDto> getSubcategories(
+    List<SubcategoryDto> getSubcategories(
             @ApiParam("a parent category to look for subcategories in") @QueryParam("parentId") Long parentId
     );
 
     @ApiOperation("Get a subcategory by id")
     @GET
     @Path("/subcategory/{id}")
-    SubCategoryDto getSubcategory(@ApiParam("The id of this subcategory") @PathParam("id") Long id);
+    SubcategoryDto getSubcategory(@ApiParam("The id of this subcategory") @PathParam("id") Long id);
 }

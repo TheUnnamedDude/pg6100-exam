@@ -2,19 +2,15 @@ package no.westerdals.quiz;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import no.westerdals.quiz.dto.AnswerDto;
 import no.westerdals.quiz.dto.CategoryDto;
-import no.westerdals.quiz.dto.QuestionDto;
-import no.westerdals.quiz.dto.SubCategoryDto;
+import no.westerdals.quiz.dto.SubcategoryDto;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.URI;
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.*;
 //import static org.hamcrest.core.Is.*;
@@ -22,6 +18,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 public class CategoryRestIT extends RestITBase {
+
     @BeforeClass
     public static void initializeClass() {
         waitForJBoss(10);
@@ -33,16 +30,6 @@ public class CategoryRestIT extends RestITBase {
 
     @Test
     public void testCreateCategory() throws Exception {
-        //QuestionDto questionDto = new QuestionDto();
-        //AnswerDto answer = new AnswerDto();
-        //answer.text = "Yes";
-        //questionDto.text = "Is this working?";
-        //questionDto.answer = answer;
-        //questionDto.alternatives = Arrays.stream(new String[] {"No", "Maybe", "Who knows"}).map(s -> {
-        //    AnswerDto a = new AnswerDto();
-        //    a.text = s;
-        //    return a;
-        //}).collect(Collectors.toList());
         CategoryDto categoryDto = new CategoryDto();
         categoryDto.text = "Integration tests";
         String location =
@@ -169,7 +156,7 @@ public class CategoryRestIT extends RestITBase {
                 .extract()
                 .header("Location");
 
-        SubCategoryDto subCategory = new SubCategoryDto();
+        SubcategoryDto subCategory = new SubcategoryDto();
         subCategory.text = "Java";
 
         String subcategoryLocation = given()
@@ -203,7 +190,7 @@ public class CategoryRestIT extends RestITBase {
                 .extract()
                 .header("Location");
 
-        SubCategoryDto subCategory = new SubCategoryDto();
+        SubcategoryDto subCategory = new SubcategoryDto();
         subCategory.text = "Software";
 
         given()
@@ -323,9 +310,9 @@ public class CategoryRestIT extends RestITBase {
                 .extract()
                 .header("Location");
 
-        SubCategoryDto subcategory1 = new SubCategoryDto();
-        SubCategoryDto subcategory2 = new SubCategoryDto();
-        SubCategoryDto subcategory3 = new SubCategoryDto();
+        SubcategoryDto subcategory1 = new SubcategoryDto();
+        SubcategoryDto subcategory2 = new SubcategoryDto();
+        SubcategoryDto subcategory3 = new SubcategoryDto();
 
         subcategory1.text = "Rock";
         subcategory2.text = "Chromium";
@@ -357,13 +344,13 @@ public class CategoryRestIT extends RestITBase {
                 .extract()
                 .header("Location");
 
-        SubCategoryDto[] subcategories = given()
+        SubcategoryDto[] subcategories = given()
                 .accept(ContentType.JSON)
                 .get("subcategories")
                 .then()
                 .statusCode(200)
                 .extract()
-                .as(SubCategoryDto[].class);
+                .as(SubcategoryDto[].class);
 
         assertTrue("Missing subcategory 1", Arrays.stream(subcategories).anyMatch(c -> c.text.equals(subcategory1.text)));
         assertTrue("Missing subcategory 2", Arrays.stream(subcategories).anyMatch(c -> c.text.equals(subcategory2.text)));
