@@ -1,7 +1,6 @@
 package no.westerdals.quiz.entities;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -33,6 +32,9 @@ public class Question {
     @NotNull
     @OneToOne(optional = false, cascade = CascadeType.ALL)
     private Answer correctAnswer;
+
+    @ManyToOne
+    private Subcategory subcategory;
 
     public Long getId() {
         return id;

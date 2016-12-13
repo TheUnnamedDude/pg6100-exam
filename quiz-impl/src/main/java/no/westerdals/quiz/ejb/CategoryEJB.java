@@ -1,7 +1,7 @@
 package no.westerdals.quiz.ejb;
 
 import no.westerdals.quiz.entities.Category;
-import no.westerdals.quiz.entities.SubCategory;
+import no.westerdals.quiz.entities.Subcategory;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -29,22 +29,22 @@ public class CategoryEJB {
         return category;
     }
 
-    public SubCategory createSubCategory(Long parentCategory, String name) {
+    public Subcategory createSubCategory(Long parentCategory, String name) {
         Category category = getCategory(parentCategory);
-        SubCategory subCategory = new SubCategory();
-        subCategory.setName(name);
-        subCategory.setParent(category);
-        category.getSubcategories().add(subCategory);
-        em.persist(subCategory);
-        return subCategory;
+        Subcategory subcategory = new Subcategory();
+        subcategory.setName(name);
+        subcategory.setParent(category);
+        category.getSubcategories().add(subcategory);
+        em.persist(subcategory);
+        return subcategory;
     }
 
     public Category getCategory(Long categoryId) {
         return em.find(Category.class, categoryId);
     }
 
-    public SubCategory getSubCategory(Long categoryId) {
-        return em.find(SubCategory.class, categoryId);
+    public Subcategory getSubCategory(Long categoryId) {
+        return em.find(Subcategory.class, categoryId);
     }
 
     public List<Category> getCategories() {
@@ -56,25 +56,25 @@ public class CategoryEJB {
         categories.stream()
                 .map(Category::getSubcategories)
                 .flatMap(List::stream)
-                .forEach(SubCategory::getName); // Make sure every subcategory is resolved
+                .forEach(Subcategory::getName); // Make sure every subcategory is resolved
         return categories;
     }
 
-    public List<SubCategory> getSubCategories() {
-        return em.createNamedQuery(SubCategory.GET_ALL, SubCategory.class).getResultList();
+    public List<Subcategory> getSubCategories() {
+        return em.createNamedQuery(Subcategory.GET_ALL, Subcategory.class).getResultList();
     }
 
     public void deleteCategory(Long categoryId) {
         em.remove(getCategory(categoryId));
     }
 
-    public List<SubCategory> getSubcategoryByParent(Long parentId) {
-        return getCategory(parentId).getSubcategories();
+    public List<Subcategory> getSubcategoryByParent(Long parentId) {
+        return getCategoryWithSubcategories(parentId).getSubcategories();
     }
 
     public Category getCategoryWithSubcategories(Long categoryId) {
         Category category = getCategory(categoryId);
-        category.getSubcategories().forEach(SubCategory::getName);
+        category.getSubcategories().forEach(Subcategory::getName);
         return category;
     }
 }

@@ -263,4 +263,137 @@ public class CategoryRestIT extends RestITBase {
 
         assertNotNull(expanded.subcategories);
     }
+
+    @Test
+    public void testUpdateCategory() throws Exception {
+        CategoryDto categoryDto = new CategoryDto();
+        categoryDto.text = "Unicorns";
+        String location = given()
+                .contentType(ContentType.JSON)
+                .body(categoryDto)
+                .post()
+                .then()
+                .statusCode(201)
+                .extract()
+                .header("Location");
+
+        CategoryDto mergePatchCategory = new CategoryDto();
+        mergePatchCategory.text = "Horses";
+
+        String updatedLocation = given()
+                .contentType("application/merge-patch+json")
+                .body(mergePatchCategory)
+                .patch(location)
+                .then()
+                .statusCode(200)
+                .extract()
+                .header("Location");
+
+        assertEquals(location, updatedLocation);
+
+        given()
+                .accept(ContentType.JSON)
+                .get(location)
+                .then()
+                .statusCode(200)
+                .body("text", is(mergePatchCategory.text));
+    }
+
+    @Test
+    public void testGetSubcategories() throws Exception {
+        CategoryDto category1 = new CategoryDto();
+        CategoryDto category2 = new CategoryDto();
+        category1.text = "Music";
+        category2.text = "Browsers";
+        String category1Location = given()
+                .contentType(ContentType.JSON)
+                .body(category1)
+                .post()
+                .then()
+                .statusCode(201)
+                .extract()
+                .header("Location");
+
+        String category2Location = given()
+                .contentType(ContentType.JSON)
+                .body(category2)
+                .post()
+                .then()
+                .statusCode(201)
+                .extract()
+                .header("Location");
+
+        SubCategoryDto subcategory1 = new SubCategoryDto();
+        SubCategoryDto subcategory2 = new SubCategoryDto();
+        SubCategoryDto subcategory3 = new SubCategoryDto();
+
+        subcategory1.text = "Rock";
+        subcategory2.text = "Chromium";
+        subcategory3.text = "Firefox";
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(subcategory1)
+                .post(category1Location + "/subcategories")
+                .then()
+                .statusCode(201)
+                .extract()
+                .header("Location");
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(subcategory2)
+                .post(category2Location + "/subcategories")
+                .then()
+                .statusCode(201)
+                .extract()
+                .header("Location");
+        given()
+                .contentType(ContentType.JSON)
+                .body(subcategory3)
+                .post(category2Location + "/subcategories")
+                .then()
+                .statusCode(201)
+                .extract()
+                .header("Location");
+
+        SubCategoryDto[] subcategories = given()
+                .accept(ContentType.JSON)
+                .get("subcategories")
+                .then()
+                .statusCode(200)
+                .extract()
+                .as(SubCategoryDto[].class);
+
+        assertTrue("Missing subcategory 1", Arrays.stream(subcategories).anyMatch(c -> c.text.equals(subcategory1.text)));
+        assertTrue("Missing subcategory 2", Arrays.stream(subcategories).anyMatch(c -> c.text.equals(subcategory2.text)));
+        assertTrue("Missing subcategory 3", Arrays.stream(subcategories).anyMatch(c -> c.text.equals(subcategory3.text)));
+
+        CategoryDto category1Result = given()
+                .accept(ContentType.JSON)
+                .get(category1Location)
+                .then()
+                .extract()
+                .as(CategoryDto.class);
+        CategoryDto category2Result = given()
+                .accept(ContentType.JSON)
+                .get(category2Location)
+                .then()
+                .extract()
+                .as(CategoryDto.class);
+
+        given()
+                .accept(ContentType.JSON)
+                .queryParam("parentId", category1Result.id)
+                .get("subcategories")
+                .then()
+                .statusCode(200)
+                .body("size()", is(1));
+        given()
+                .accept(ContentType.JSON)
+                .get(category2Result.id + "/subcategories")
+                .then()
+                .statusCode(200)
+                .body("size()", is(2));
+    }
 }

@@ -6,13 +6,13 @@ import javax.validation.constraints.Size;
 
 @NamedQueries({
         @NamedQuery(
-                name = SubCategory.GET_ALL,
-                query = "select c from SubCategory as c"
+                name = Subcategory.GET_ALL,
+                query = "select c from Subcategory as c"
         )
 })
 @Entity
-public class SubCategory {
-    public static final String GET_ALL = "SubCategory#getAll";
+public class Subcategory {
+    public static final String GET_ALL = "Subcategory#getAll";
 
     @GeneratedValue
     @Id
@@ -23,7 +23,7 @@ public class SubCategory {
     private String name;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Category parent;
 
     public Long getId() {

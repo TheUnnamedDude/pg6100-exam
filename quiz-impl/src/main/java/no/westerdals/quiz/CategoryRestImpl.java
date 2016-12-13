@@ -8,7 +8,7 @@ import no.westerdals.quiz.converters.CategoryDtoConverter;
 import no.westerdals.quiz.converters.SubcategoryDtoConverter;
 import no.westerdals.quiz.ejb.CategoryEJB;
 import no.westerdals.quiz.entities.Category;
-import no.westerdals.quiz.entities.SubCategory;
+import no.westerdals.quiz.entities.Subcategory;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -17,7 +17,6 @@ import javax.ejb.TransactionAttributeType;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
@@ -84,14 +83,16 @@ public class CategoryRestImpl implements CategoryRest {
 
         categoryEJB.updateCategory(category.getId(), text);
 
-        return Response.seeOther(UriBuilder.fromPath(ENDPOINT.substring(1) + "/{id}").build(category.getId()))
+        return Response.ok().location(uriInfo.getBaseUriBuilder().path(ENDPOINT).path(category.getId().toString()).build())
                 .build();
     }
 
     @Override
     public Response getSubcategoriesByCategory(Long categoryId) {
         return Response.status(301)
-                .location(UriBuilder.fromUri(ENDPOINT.substring(1) + "/subcategories")
+                .location(uriInfo.getBaseUriBuilder()
+                        .path(ENDPOINT)
+                        .path("subcategories")
                         .queryParam("parentId", categoryId)
                         .build())
                 .build();
@@ -99,19 +100,23 @@ public class CategoryRestImpl implements CategoryRest {
 
     @Override
     public Response createSubcategory(Long parentId, SubCategoryDto subCategoryDto) {
-        SubCategory subCategory = categoryEJB.createSubCategory(parentId, subCategoryDto.text);
+        Subcategory subcategory = categoryEJB.createSubCategory(parentId, subCategoryDto.text);
         return Response.created(
                 uriInfo.getBaseUriBuilder()
                         .path(ENDPOINT)
                         .path("subcategory")
-                        .path(subCategory.getId().toString())
+                        .path(subcategory.getId().toString())
                         .build())
                 .build();
     }
 
     @Override
     public List<SubCategoryDto> getSubcategories(Long parentId) {
-        return subcategoryConverter.convert(categoryEJB.getSubcategoryByParent(parentId));
+        if (parentId == null) {
+            return subcategoryConverter.convert(categoryEJB.getSubCategories());
+        } else {
+            return subcategoryConverter.convert(categoryEJB.getSubcategoryByParent(parentId));
+        }
     }
 
     @Override

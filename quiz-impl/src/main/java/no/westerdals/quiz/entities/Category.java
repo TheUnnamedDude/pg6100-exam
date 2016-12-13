@@ -1,7 +1,6 @@
 package no.westerdals.quiz.entities;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -22,7 +21,7 @@ public class Category {
     @Size(min = 4)
     private String text;
     @OneToMany(mappedBy = "parent")
-    private List<SubCategory> subcategories;
+    private List<Subcategory> subcategories;
 
     public Long getId() {
         return id;
@@ -32,7 +31,7 @@ public class Category {
         return text;
     }
 
-    public List<SubCategory> getSubcategories() {
+    public List<Subcategory> getSubcategories() {
         return subcategories;
     }
 
@@ -40,7 +39,7 @@ public class Category {
         this.text = text;
     }
 
-    public void setSubcategories(List<SubCategory> subcategories) {
+    public void setSubcategories(List<Subcategory> subcategories) {
         this.subcategories = subcategories;
     }
 }

@@ -1,11 +1,11 @@
 package no.westerdals.quiz.converters;
 
 import no.westerdals.quiz.dto.SubCategoryDto;
-import no.westerdals.quiz.entities.SubCategory;
+import no.westerdals.quiz.entities.Subcategory;
 
-public class SubcategoryDtoConverter implements DtoConverter<SubCategory, SubCategoryDto> {
+public class SubcategoryDtoConverter implements DtoConverter<Subcategory, SubCategoryDto> {
     @Override
-    public SubCategoryDto convert(SubCategory entity) {
+    public SubCategoryDto convert(Subcategory entity) {
         SubCategoryDto subcategory = new SubCategoryDto();
         subcategory.id = entity.getId();
         subcategory.text = entity.getName();
