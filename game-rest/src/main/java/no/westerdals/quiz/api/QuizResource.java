@@ -1,5 +1,7 @@
 package no.westerdals.quiz.api;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import no.westerdals.quiz.dto.Answer;
 import no.westerdals.quiz.hysterix.QuizRest;
@@ -11,7 +13,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-@Path("/game/api")
+@Api(value = "/game/api", description = "General rest api for quiz categories")
+@Path("/api")
 @Produces(MediaType.APPLICATION_JSON)
 public class QuizResource {
     private QuizRest quizRest;
@@ -20,12 +23,14 @@ public class QuizResource {
         this.quizRest = quizRest;
     }
 
+    @ApiOperation("Get a random quiz")
     @Path("random")
     @GET
     public Quiz getRandomQuiz() {
         return quizRest.getRandomQuiz();
     }
 
+    @ApiOperation("Check if the answer was correct")
     @Path("games")
     @POST
     public Boolean checkAnswer(@ApiParam("The ID of the answer and question") Answer answerDto) {

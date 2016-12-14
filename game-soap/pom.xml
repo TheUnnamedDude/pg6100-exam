@@ -53,19 +53,24 @@
                 <artifactId>maven-war-plugin</artifactId>
             </plugin>
             <plugin>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <groupId>org.jacoco</groupId>
-            </plugin>
-            <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
+                <configuration>
+                    <java-opts>
+                        -javaagent:${settings.localRepository}${fs}org${fs}jacoco${fs}org.jacoco.agent${fs}${jacoco.version}${fs}org.jacoco.agent-${jacoco.version}-runtime.jar=destfile=${basedir}${fs}target${fs}jacoco-it.exec
+                    </java-opts>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <groupId>org.jacoco</groupId>
             </plugin>
             <plugin>
                 <groupId>org.jvnet.jax-ws-commons</groupId>
                 <artifactId>jaxws-maven-plugin</artifactId>
                 <configuration>
                     <vmArgs>
-                        <vmArg>-Djavax.xml.accessExternalSchema=all -javaagent:${settings.localRepository}${fs}org${fs}jacoco${fs}org.jacoco.agent${fs}${jacoco.version}${fs}org.jacoco.agent-${jacoco.version}-runtime.jar=destfile=${basedir}${fs}target${fs}jacoco-it.exec</vmArg>
+                        <vmArg>-Djavax.xml.accessExternalSchema=all</vmArg>
                     </vmArgs>
                 </configuration>
                 <executions>

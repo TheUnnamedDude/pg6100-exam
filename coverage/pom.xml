@@ -29,6 +29,11 @@
         </dependency>
         <dependency>
             <groupId>no.westerdals.quiz</groupId>
+            <artifactId>game-commands</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>no.westerdals.quiz</groupId>
             <artifactId>game-soap</artifactId>
             <version>${project.version}</version>
             <type>war</type>
