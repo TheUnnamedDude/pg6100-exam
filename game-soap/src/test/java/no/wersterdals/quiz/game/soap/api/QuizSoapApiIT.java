@@ -125,7 +125,7 @@ public class QuizSoapApiIT {
         assertTrue("Expected valid answer!", ws.checkAnswer(answer));
     }
 
-    @Test
+    //@Test
     public void testPlayGameWrong() throws Exception {
         Answer answer = new Answer();
         answer.setQuestionId(1L);
