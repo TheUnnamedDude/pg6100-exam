@@ -11,6 +11,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 import static io.restassured.RestAssured.*;
@@ -166,6 +167,56 @@ public class QuizRestIT extends RestITBase {
 
         assertTrue("Didn't find the same question", foundSame);
         assertTrue("Didn't find a different question", foundDifferent);
+    }
+
+    @Test
+    public void testChangeQuestion() {
+        SubcategoryDto subcategory = createSubcategory("Change", "Questions");
+        QuestionDto question = new QuestionDto();
+        question.text = "TODO: Change this";
+        question.category = subcategory;
+        question.answer = new AnswerDto();
+        question.answer.text = "Cows";
+        question.alternatives = Stream.of("1abc", "2abc", "3abc").map(s -> {
+            AnswerDto a = new AnswerDto();
+            a.text = s;
+            return a;
+        }).collect(Collectors.toList());
+        String location = given()
+                .contentType(ContentType.JSON)
+                .body(question)
+                .post("quizzes")
+                .then()
+                .statusCode(201)
+                .extract()
+                .header("Location");
+
+        QuestionDto newText = new QuestionDto();
+        newText.alternatives = Stream.of("1abc", "2abc", "3abc").map(s -> {
+            AnswerDto a = new AnswerDto();
+            a.text = s;
+            return a;
+        }).collect(Collectors.toList());
+        newText.text = "Changed";
+        String updatedLocation = given()
+                .contentType("application/merge-patch+json")
+                .body(newText)
+                .patch(location)
+                .then()
+                .statusCode(200)
+                .extract()
+                .header("Location");
+
+        assertEquals(location, updatedLocation);
+
+        QuestionDto newQuestion = given()
+                .accept(ContentType.JSON)
+                .get(updatedLocation)
+                .then()
+                .statusCode(200)
+                .extract()
+                .as(QuestionDto.class);
+        assertEquals(newText.text, newQuestion.text);
     }
 
     @Test

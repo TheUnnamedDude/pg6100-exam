@@ -47,20 +47,13 @@ public class QuestionEJB {
         return em.createNamedQuery(Question.GET_SIZE, Long.class).getSingleResult();
     }
 
-    public Question updateQuestion(Long questionId, String text, String answer, String... incorrectAnswers) {
+    public Question updateQuestion(Long questionId, String text, String answer) {
         Question question = getQuestion(questionId);
         if (text != null) {
             question.setText(text);
         }
         if (answer != null) {
             question.getCorrectAnswer().setText(answer);
-        }
-        if (incorrectAnswers != null) {
-            question.getIncorrectAnswers().clear();
-            List<Answer> answers = Arrays.stream(incorrectAnswers)
-                    .map(s -> createAnswer(s, question))
-                    .collect(Collectors.toList());
-            question.setIncorrectAnswers(answers);
         }
         return question;
     }

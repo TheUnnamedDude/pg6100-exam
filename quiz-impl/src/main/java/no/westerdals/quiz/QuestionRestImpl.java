@@ -1,5 +1,8 @@
 package no.westerdals.quiz;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.annotations.ApiParam;
 import no.westerdals.quiz.dto.DtoList;
 import no.westerdals.quiz.dto.QuestionDto;
 import no.westerdals.quiz.converters.QuestionDtoConverter;
@@ -10,6 +13,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -19,6 +23,7 @@ import java.util.stream.Collectors;
 @Stateless
 @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class QuestionRestImpl implements QuestionRest {
+    private final ObjectMapper JACKSON = new ObjectMapper();
     @Context
     private UriInfo uriInfo;
 
@@ -73,5 +78,31 @@ public class QuestionRestImpl implements QuestionRest {
     @Override
     public QuestionDto getRandomQuestion() {
         return questionConverter.convert(questionEJB.getRandomQuestion());
+    }
+
+    @Override
+    public Response patchQuestion(Long id, String jsonString) {
+        Question question = questionEJB.getQuestion(id);
+        if (question == null) { // In case we want to change its behavior
+            throw new WebApplicationException(404);
+        }
+
+        JsonNode json;
+        try {
+            json = JACKSON.readValue(jsonString, JsonNode.class);
+        } catch (Exception e) {
+            throw new WebApplicationException(/*"Invalid json input", */400);
+        }
+
+        String text = json.get("text").asText(question.getText());
+        String answer = null;
+        if (json.hasNonNull("answer")) {
+            answer = json.get("answer").get("text").asText();
+        }
+
+        questionEJB.updateQuestion(question.getId(), text, answer);
+
+        return Response.ok().location(uriInfo.getBaseUriBuilder().path(ENDPOINT).path(question.getId().toString()).build())
+                .build();
     }
 }

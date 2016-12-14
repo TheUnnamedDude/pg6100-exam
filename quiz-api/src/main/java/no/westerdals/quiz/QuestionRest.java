@@ -3,6 +3,7 @@ package no.westerdals.quiz;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.jaxrs.PATCH;
 import no.westerdals.quiz.dto.DtoList;
 import no.westerdals.quiz.dto.QuestionDto;
 
@@ -35,4 +36,13 @@ public interface QuestionRest {
     @ApiOperation("Get a question by id")
     @Path("/{id}")
     QuestionDto getQuestion(@ApiParam("The id to look for") @PathParam("id") Long id);
+
+    @ApiOperation("Update the content of a question")
+    @PATCH
+    @Path("/{id}")
+    @Consumes("application/merge-patch+json")
+    Response patchQuestion(
+            @ApiParam("The id of the question to patch") @PathParam("id") Long id,
+            @ApiParam("The entity that should be used for the merge patch") String json
+    );
 }
