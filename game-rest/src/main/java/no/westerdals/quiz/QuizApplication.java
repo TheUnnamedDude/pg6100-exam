@@ -21,7 +21,7 @@ public class QuizApplication extends Application<QuizConfiguration> {
         beanConfig.setVersion("0.0.1");
         beanConfig.setSchemes(new String[]{"http"});
         beanConfig.setHost("localhost:8080");
-        beanConfig.setBasePath("/game/api");
+        beanConfig.setBasePath("/game");
         beanConfig.setResourcePackage("no.westerdals.quiz.api");
 
         beanConfig.setScan(true);

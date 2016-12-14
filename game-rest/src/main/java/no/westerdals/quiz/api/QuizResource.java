@@ -13,7 +13,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-@Api(value = "/game/api", description = "General rest api for quiz categories")
+@Api(value = "/api", description = "General rest api for quiz categories")
 @Path("/api")
 @Produces(MediaType.APPLICATION_JSON)
 public class QuizResource {
