@@ -2,7 +2,6 @@ package no.westerdals.quiz.api;
 
 import io.swagger.annotations.ApiParam;
 import no.westerdals.quiz.dto.Answer;
-import no.westerdals.quiz.dto.AnswerDto;
 import no.westerdals.quiz.hysterix.QuizRest;
 import no.westerdals.quiz.dto.Quiz;
 
