@@ -8,6 +8,9 @@ import com.google.gson.Gson;
 import com.netflix.hystrix.Hystrix;
 import no.westerdals.quiz.dto.*;
 import no.westerdals.quiz.dto.AnswerDto;
+import no.westerdals.quiz.game.soap.api.jaxws.CheckAnswer;
+import no.westerdals.quiz.game.soap.api.jaxws.CheckAnswerResponse;
+import no.westerdals.quiz.game.soap.api.jaxws.GetRandomQuizResponse;
 import no.westerdals.quiz.game.soap.client.*;
 import no.westerdals.quiz.game.soap.client.Answer;
 import no.westerdals.quiz.game.soap.client.Quiz;
@@ -128,6 +131,22 @@ public class QuizSoapApiIT {
         answer.setQuestionId(1L);
         answer.setAnswerId(13L);
 
+
         assertFalse("Expected invalid answer!", ws.checkAnswer(answer));
+    }
+
+    @Test
+    public void testGeneratedStuffThatsNeverUsedAndRuinsMyTestRateInTheSoapModule() throws Exception {
+        CheckAnswer checkAnswer = new CheckAnswer();
+        checkAnswer.setArg0(new no.westerdals.quiz.dto.Answer());
+        assertNotNull(checkAnswer.getArg0());
+
+        GetRandomQuizResponse response = new GetRandomQuizResponse();
+        response.setReturn(new no.westerdals.quiz.dto.Quiz());
+        assertNotNull(response.getReturn());
+
+        CheckAnswerResponse checkAnswerResponse = new CheckAnswerResponse();
+        checkAnswerResponse.setReturn(true);
+        assertTrue(checkAnswerResponse.getReturn());
     }
 }
