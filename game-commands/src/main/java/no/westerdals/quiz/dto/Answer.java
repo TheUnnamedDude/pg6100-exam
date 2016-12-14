@@ -1,21 +1,21 @@
 package no.westerdals.quiz.dto;
 
 public class Answer {
-    private Long id;
-    private String text;
+    private Long answerId;
+    private Long questionId;
 
     public Answer() {}
 
-    public Answer(Long id, String text) {
-        this.id = id;
-        this.text = text;
+    public Answer(Long answerId, Long questionId) {
+        this.answerId = answerId;
+        this.questionId = questionId;
     }
 
-    public Long getId() {
-        return id;
+    public Long getAnswerId() {
+        return answerId;
     }
 
-    public String getText() {
-        return text;
+    public Long getQuestionId() {
+        return questionId;
     }
 }

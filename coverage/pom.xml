@@ -22,6 +22,11 @@
             <artifactId>quiz-api</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>no.westerdals.quiz</groupId>
+            <artifactId>game-rest</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
