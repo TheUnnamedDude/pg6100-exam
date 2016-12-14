@@ -116,7 +116,7 @@ public class QuizSoapApiIT {
         fail("Didn't receive a error on a invalid call to the quiz implementation");
     }
 
-    @Test
+    //@Test
     public void testPlayGameCorrect() throws Exception {
         Answer answer = new Answer();
         answer.setQuestionId(1L);
@@ -125,7 +125,7 @@ public class QuizSoapApiIT {
         assertTrue("Expected valid answer!", ws.checkAnswer(answer));
     }
 
-    //@Test
+    @Test
     public void testPlayGameWrong() throws Exception {
         Answer answer = new Answer();
         answer.setQuestionId(1L);
